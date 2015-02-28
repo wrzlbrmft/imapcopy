@@ -29,7 +29,7 @@ printf('    connecting via %s...', $src->getMailbox());
 $_ = $src->connect();
 printf(" %s\n", test($_));
 if (!$src->isConnected()) {
-	printf(">>> source is not ready\n");
+	printf(">>> error opening source\n");
 	die();
 }
 else {
@@ -38,15 +38,60 @@ else {
 
 printf("\n");
 
+/*
 printf("*** opening destination\n");
 $dst = new Imap($conf['dst']);
 printf('    connecting via %s...', $dst->getMailbox());
 $_ = $dst->connect();
 printf(" %s\n", test($_));
 if (!$dst->isConnected()) {
-	printf(">>> destination is not ready\n");
+	printf(">>> error opening destination\n");
 	die();
 }
 else {
 	printf(">>> destination is ready\n");
+}
+
+printf("\n");
+*/
+
+printf('*** Counting total source folders...');
+$srcFolders = $src->getSubFolders('', '*');
+printf(" %s\n", test(is_array($srcFolders)));
+if (!is_array($srcFolders)) {
+	printf(">>> error counting total source folders\n");
+	die();
+}
+$srcFoldersCount = count($srcFolders);
+printf(">>> %d total source folder(s) found\n", $srcFoldersCount);
+if (0 == $srcFoldersCount) {
+	printf(">>> nothing to do");
+	die();
+}
+
+printf("\n");
+
+printf('*** counting total source messages...');
+$srcMessagesCount = 0;
+$srcFolderNum = 0;
+foreach ($srcFolders as $srcFolder) {
+	$srcFolderNum++;
+
+	printf("\n");
+	printf("    ... (f:%d/%d) %s\n", $srcFolderNum, $srcFoldersCount, utf8_encode($srcFolder));
+
+	printf('        opening folder...');
+	$_ = $src->openFolder($srcFolder);
+	printf(" %s\n", test($_));
+
+	printf('        counting folder messages...');
+	$srcFolderMessagesCount = $src->getFolderMessagesCount();
+	printf(" %s, %d folder message(s) found\n", test(0 < $srcFolderMessagesCount), $srcFolderMessagesCount);
+
+	$srcMessagesCount += $srcFolderMessagesCount;
+}
+printf(">>> %d total source message(s) found\n", $srcMessagesCount);
+if (0 == $srcMessagesCount) {
+	printf(">>> nothing to do");
+	die();
 }
