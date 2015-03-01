@@ -92,6 +92,9 @@ class Imap {
 			if (isset($conf['trimFolderPath']) && !empty($conf['trimFolderPath'])) {
 				foreach ($folderPath as &$i) {
 					$i = trim($i);
+					while (false !== strpos($i, '  ')) {
+						$i = str_replace('  ', ' ', $i);
+					}
 				}
 			}
 		}
