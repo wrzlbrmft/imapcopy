@@ -19,17 +19,17 @@ class Imap {
 
 	public function getMailboxOptions() {
 		$conf = $this->getConf();
-		$options = NULL;
+		$options = '';
 
-		if (isset($conf['ssl']) && $conf['ssl']) {
+		if (isset($conf['ssl']) && !empty($conf['ssl'])) {
 			$options .= '/ssl';
 		}
 
-		if (isset($conf['sslNovalidateCert']) && $conf['sslNovalidateCert']) {
+		if (isset($conf['sslNovalidateCert']) && !empty($conf['sslNovalidateCert'])) {
 			$options .= '/novalidate-cert';
 		}
 
-		if (isset($conf['readOnly']) && $conf['readOnly']) {
+		if (isset($conf['readOnly']) && !empty($conf['readOnly'])) {
 			$options .= '/readonly';
 		}
 
@@ -38,7 +38,7 @@ class Imap {
 
 	public function getMailbox() {
 		$conf = $this->getConf();
-		$hostname = isset($conf['hostname']) ? $conf['hostname'] : NULL;
+		$hostname = isset($conf['hostname']) ? $conf['hostname'] : '';
 		$port = isset($conf['port']) ? $conf['port'] : '143';
 
 		return sprintf('{%s:%d/imap%s}',
@@ -49,17 +49,17 @@ class Imap {
 	}
 
 	public function isConnected() {
-		return !empty($this->getConnection());
+		return NULL !== $this->getConnection();
 	}
 
 	public function connect() {
 		if (!$this->isConnected()) {
 			$conf = $this->getConf();
-			$username = isset($conf['username']) ? $conf['username'] : NULL;
-			$password = isset($conf['password']) ? $conf['password'] : NULL;
+			$username = isset($conf['username']) ? $conf['username'] : '';
+			$password = isset($conf['password']) ? $conf['password'] : '';
 
 			$connection = imap_open(imap_utf7_encode($this->getMailbox()), $username, $password);
-			if (!empty($connection)) {
+			if (false !== $connection) {
 				$this->setConnection($connection);
 				return true;
 			}
@@ -89,7 +89,7 @@ class Imap {
 	public function joinFolderPath(array $folderPath, $trim = false) {
 		if ($trim) {
 			$conf = $this->getConf();
-			if (isset($conf['trimFolderPath']) && $conf['trimFolderPath']) {
+			if (isset($conf['trimFolderPath']) && !empty($conf['trimFolderPath'])) {
 				foreach ($folderPath as &$i) {
 					$i = trim($i);
 				}
@@ -131,7 +131,7 @@ class Imap {
 
 	public function popFolder($folder) {
 		$conf = $this->getConf();
-		$popFolder = isset($conf['popFolder']) ? $conf['popFolder'] : NULL;
+		$popFolder = isset($conf['popFolder']) ? $conf['popFolder'] : '';
 
 		if (!empty($popFolder)) {
 			if (0 === strpos($folder, $popFolder)) {
@@ -147,7 +147,7 @@ class Imap {
 
 	public function pushFolder($folder) {
 		$conf = $this->getConf();
-		$pushFolder = isset($conf['pushFolder']) ? $conf['pushFolder'] : NULL;
+		$pushFolder = isset($conf['pushFolder']) ? $conf['pushFolder'] : '';
 
 		if (!empty($pushFolder)) {
 			$folder = $pushFolder . $this->getFolderSeparator() . $folder;
