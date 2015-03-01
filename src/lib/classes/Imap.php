@@ -86,7 +86,15 @@ class Imap {
 		return explode($this->getFolderSeparator(), $folder);
 	}
 
-	public function joinFolderPath(array $folderPath) {
+	public function joinFolderPath(array $folderPath, $trim = false) {
+		if ($trim) {
+			$conf = $this->getConf();
+			if (isset($conf['trimFolderPath']) && $conf['trimFolderPath']) {
+				foreach ($folderPath as &$i) {
+					$i = trim($i);
+				}
+			}
+		}
 		return implode($this->getFolderSeparator(), $folderPath);
 	}
 
@@ -121,13 +129,28 @@ class Imap {
 		return $folder;
 	}
 
-	public function trimFolder($folder, $trimFolder) {
-		if (0 === strpos($folder, $trimFolder)) {
-			$folder = substr($folder, strlen($trimFolder));
+	public function popFolder($folder) {
+		$conf = $this->getConf();
+		$popFolder = isset($conf['popFolder']) ? $conf['popFolder'] : NULL;
 
-			if (0 === strpos($folder, $this->getFolderSeparator())) {
-				$folder = substr($folder, strlen($this->getFolderSeparator()));
+		if (!empty($popFolder)) {
+			if (0 === strpos($folder, $popFolder)) {
+				$folder = substr($folder, strlen($popFolder));
+
+				if (0 === strpos($folder, $this->getFolderSeparator())) {
+					$folder = substr($folder, strlen($this->getFolderSeparator()));
+				}
 			}
+		}
+		return $folder;
+	}
+
+	public function pushFolder($folder) {
+		$conf = $this->getConf();
+		$pushFolder = isset($conf['pushFolder']) ? $conf['pushFolder'] : NULL;
+
+		if (!empty($pushFolder)) {
+			$folder = $pushFolder . $this->getFolderSeparator() . $folder;
 		}
 		return $folder;
 	}
@@ -136,6 +159,12 @@ class Imap {
 		$conf = $this->getConf();
 		return (isset($conf['ignoredFolders']) && is_array($conf['ignoredFolders'])) ?
 			$conf['ignoredFolders'] : array();
+	}
+
+	public function getMappedFolders() {
+		$conf = $this->getConf();
+		return (isset($conf['mappedFolders']) && is_array($conf['mappedFolders'])) ?
+			$conf['mappedFolders'] : array();
 	}
 
 	public function getSubFolders($folder, $pattern = '%') {
@@ -157,5 +186,61 @@ class Imap {
 
 	public function getFolderMessagesCount() {
 		return imap_num_msg($this->getConnection());
+	}
+
+	public function getMappedFolder($folder) {
+		$mappedFolders = $this->getMappedFolders();
+		if (array_key_exists($folder, $mappedFolders)) {
+			return $mappedFolders[$folder];
+		}
+		return $folder;
+	}
+
+	public function createFolder($folder) {
+		return imap_createmailbox($this->getConnection(), $this->getFullFolderName($folder));
+	}
+
+	public function getMessageHeaderInfo($messageNum) {
+		return imap_headerinfo($this->getConnection(), $messageNum);
+	}
+
+	public function loadMessage($messageNum) {
+		return imap_fetchbody($this->getConnection(), $messageNum, '');
+	}
+
+	public function getMessageOptions($messageHeaderInfo) {
+		$options = array();
+
+		if (isset($messageHeaderInfo->Unseen) && !trim($messageHeaderInfo->Unseen)) {
+			$options[] = '\Seen';
+		}
+
+		if (isset($messageHeaderInfo->Answered) && trim($messageHeaderInfo->Answered)) {
+			$options[] = '\Answered';
+		}
+
+		if (isset($messageHeaderInfo->Flagged) && trim($messageHeaderInfo->Flagged)) {
+			$options[] = '\Flagged';
+		}
+
+		if (isset($messageHeaderInfo->Deleted) && trim($messageHeaderInfo->Deleted)) {
+			$options[] = '\Deleted';
+		}
+
+		if (isset($messageHeaderInfo->Draft) && trim($messageHeaderInfo->Draft)) {
+			$options[] = '\Draft';
+		}
+
+		return implode(' ', $options);
+	}
+
+	public function getMessageInternalDate($messageHeaderInfo) {
+		return date('d-M-Y H:i:s O', $messageHeaderInfo->udate);
+	}
+
+	public function storeMessage($folder, $message, $headerInfo) {
+		return imap_append($this->getConnection(), $this->getFullFolderName($folder), $message,
+			$this->getMessageOptions($headerInfo),
+			$this->getMessageInternalDate($headerInfo));
 	}
 }
