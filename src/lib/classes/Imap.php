@@ -161,6 +161,10 @@ class Imap {
 			$conf['ignoredFolders'] : array();
 	}
 
+	public function ignoreEmptyFolders() {
+		return isset($conf['ignoreEmptyFolders']) && !empty($conf['ignoreEmptyFolders']);
+	}
+
 	public function getMappedFolders() {
 		$conf = $this->getConf();
 		return (isset($conf['mappedFolders']) && is_array($conf['mappedFolders'])) ?

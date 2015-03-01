@@ -121,7 +121,7 @@ foreach ($srcFolders as $srcFolder) {
 	printf('        counting folder messages...');
 	$srcFolderMessagesCount = $src->getFolderMessagesCount();
 	printf(" %s, %d folder message(s) found\n", test(0 < $srcFolderMessagesCount), $srcFolderMessagesCount);
-	if (0 == $srcFolderMessagesCount) {
+	if (0 == $srcFolderMessagesCount && $src->ignoreEmptyFolders()) {
 		continue;
 	}
 
