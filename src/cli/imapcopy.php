@@ -78,16 +78,16 @@ foreach ($srcFolders as $srcFolder) {
 	printf("\n");
 	printf("    ... (f:%d/%d) '%s'\n", $srcFolderNum, $srcFoldersCount, utf8_encode($srcFolder));
 
-	printf('        opening folder...');
+	printf('        opening source folder...');
 	$_ = $src->openFolder($srcFolder);
 	printf(" %s\n", test($_));
 	if (!$_) {
 		continue;
 	}
 
-	printf('        counting folder messages...');
+	printf('        counting source folder messages...');
 	$srcFolderMessagesCount = $src->getFolderMessagesCount();
-	printf(" %s, %d folder message(s) found\n", test(0 < $srcFolderMessagesCount), $srcFolderMessagesCount);
+	printf(" %s, %d source folder message(s) found\n", test(0 < $srcFolderMessagesCount), $srcFolderMessagesCount);
 	if (0 == $srcFolderMessagesCount) {
 		continue;
 	}
@@ -111,16 +111,16 @@ foreach ($srcFolders as $srcFolder) {
 	printf("\n");
 	printf("    ... (f:%d/%d) '%s'\n", $srcFolderNum, $srcFoldersCount, utf8_encode($srcFolder));
 
-	printf('        opening folder...');
+	printf('        opening source folder...');
 	$_ = $src->openFolder($srcFolder);
 	printf(" %s\n", test($_));
 	if (!$_) {
 		continue;
 	}
 
-	printf('        counting folder messages...');
+	printf('        counting source folder messages...');
 	$srcFolderMessagesCount = $src->getFolderMessagesCount();
-	printf(" %s, %d folder message(s) found\n", test(0 < $srcFolderMessagesCount), $srcFolderMessagesCount);
+	printf(" %s, %d source folder message(s) found\n", test(0 < $srcFolderMessagesCount), $srcFolderMessagesCount);
 	if (0 == $srcFolderMessagesCount && $src->ignoreEmptyFolders()) {
 		continue;
 	}
@@ -135,7 +135,11 @@ foreach ($srcFolders as $srcFolder) {
 
 	printf('        creating destination folder...');
 	$_ = $dst->createFolder($dstFolder);
-	printf(" %s\n");
+	printf(" %s\n", test($_));
+
+	printf('        opening destination folder...');
+	$_ = $dst->openFolder($dstFolder);
+	printf(" %s\n", test($_));
 	if (!$_) {
 		continue;
 	}
@@ -155,12 +159,13 @@ foreach ($srcFolders as $srcFolder) {
 
 		$srcMessageHeaderInfo = $src->getMessageHeaderInfo($srcFolderMessageNum);
 		$srcMessageSubject = isset($srcMessageHeaderInfo->subject) ? $srcMessageHeaderInfo->subject : '';
-		printf(" '%s'\n", utf8_encode(mb_decode_mimeheader($srcMessageSubject)));
+		printf(" '%s'\n", mb_decode_mimeheader($srcMessageSubject));
+		printf("            source message date is %s\n", $src->getMessageInternalDate($srcMessageHeaderInfo));
 
 		$srcMessageSize = isset($srcMessageHeaderInfo->Size) ? $srcMessageHeaderInfo->Size: '?';
 		printf('            loading source message (%s byte(s))...', $srcMessageSize);
-		$srcMessage = $src->loadMessage($srcMessageNum);
-		printf(" %s, %d byte(s)\n", test(0 < strlen($srcMessage)), strlen($srcMessage));
+		$srcMessage = $src->loadMessage($srcFolderMessageNum);
+		printf(" %s, %d byte(s) read\n", test(0 < strlen($srcMessage)), strlen($srcMessage));
 
 		printf('            storing destination message...');
 		$_ = $dst->storeMessage($dstFolder, $srcMessage, $srcMessageHeaderInfo);

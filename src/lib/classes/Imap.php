@@ -150,7 +150,12 @@ class Imap {
 		$pushFolder = isset($conf['pushFolder']) ? $conf['pushFolder'] : '';
 
 		if (!empty($pushFolder)) {
-			$folder = $pushFolder . $this->getFolderSeparator() . $folder;
+			if (empty($folder)) {
+				$folder = $pushFolder;
+			}
+			else {
+				$folder = $pushFolder . $this->getFolderSeparator() . $folder;
+			}
 		}
 		return $folder;
 	}
@@ -162,6 +167,7 @@ class Imap {
 	}
 
 	public function ignoreEmptyFolders() {
+		$conf = $this->getConf();
 		return isset($conf['ignoreEmptyFolders']) && !empty($conf['ignoreEmptyFolders']);
 	}
 
