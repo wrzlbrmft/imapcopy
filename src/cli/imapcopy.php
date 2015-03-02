@@ -3,7 +3,9 @@ require_once('../lib/classes/Imap.php');
 require_once('../lib/utils.php');
 
 if (2 > $argc) {
-	printf("usage: php %s <confFile>\n", basename($argv[0]));
+	printf("usage: php %s <confFile> [<option>]\n", basename($argv[0]));
+	printf(" -test   perform a test run with no changes made (this will force a read-only\n");
+	printf("         connection to the source and will not open the destination at all)\n");
 	die();
 }
 else {
@@ -21,6 +23,22 @@ else {
 		printf("error: configuration file not found (%s)\n", $confFile);
 		die();
 	}
+
+	$args = $argv;
+	array_shift($args);
+	array_shift($args);
+}
+
+if (in_array('-test', $args)) {
+	$testRun = true;
+
+	printf("=== TEST RUN ===\n");
+	printf("\n");
+
+	$conf['src']['readOnly'] = true;
+}
+else {
+	$testRun = false;
 }
 
 printf("*** opening source\n");
@@ -41,14 +59,18 @@ printf("\n");
 printf("*** opening destination\n");
 $dst = new Imap($conf['dst']);
 printf('    connecting via \'%s\'...', $dst->getMailbox());
-$_ = $dst->connect();
-printf(" %s\n", test($_));
-if (!$dst->isConnected()) {
-	printf(">>> error opening destination\n");
-	die();
+if (!$testRun) {
+	$_ = $dst->connect();
+	printf(" %s\n", test($_));
+	if (!$dst->isConnected()) {
+		printf(">>> error opening destination\n");
+		die();
+	} else {
+		printf(">>> destination is ready\n");
+	}
 }
 else {
-	printf(">>> destination is ready\n");
+	printf(" SKIPPED\n");
 }
 
 printf("\n");
@@ -134,14 +156,24 @@ foreach ($srcFolders as $srcFolder) {
 	printf(" '%s'\n", utf8_encode($dstFolder));
 
 	printf('        creating destination folder...');
-	$_ = $dst->createFolder($dstFolder);
-	printf(" %s\n", test($_));
+	if (!$testRun) {
+		$_ = $dst->createFolder($dstFolder);
+		printf(" %s\n", test($_));
+	}
+	else {
+		printf(" SKIPPED\n");
+	}
 
 	printf('        opening destination folder...');
-	$_ = $dst->openFolder($dstFolder);
-	printf(" %s\n", test($_));
-	if (!$_) {
-		continue;
+	if (!$testRun) {
+		$_ = $dst->openFolder($dstFolder);
+		printf(" %s\n", test($_));
+		if (!$_) {
+			continue;
+		}
+	}
+	else {
+		printf(" SKIPPED\n");
 	}
 
 	for ($srcFolderMessageNum = 1; $srcFolderMessageNum <= $srcFolderMessagesCount; $srcFolderMessageNum++) {
@@ -164,11 +196,21 @@ foreach ($srcFolders as $srcFolder) {
 
 		$srcMessageSize = isset($srcMessageHeaderInfo->Size) ? $srcMessageHeaderInfo->Size: '?';
 		printf('            loading source message (%s byte(s))...', $srcMessageSize);
-		$srcMessage = $src->loadMessage($srcFolderMessageNum);
-		printf(" %d byte(s) read\n", strlen($srcMessage));
+		if (!$testRun) {
+			$srcMessage = $src->loadMessage($srcFolderMessageNum);
+			printf(" %d byte(s) read\n", strlen($srcMessage));
+		}
+		else {
+			printf(" SKIPPED\n");
+		}
 
 		printf('            storing destination message...');
-		$_ = $dst->storeMessage($dstFolder, $srcMessage, $srcMessageHeaderInfo);
-		printf(" %s\n", test($_));
+		if (!$testRun) {
+			$_ = $dst->storeMessage($dstFolder, $srcMessage, $srcMessageHeaderInfo);
+			printf(" %s\n", test($_));
+		}
+		else {
+			printf(" SKIPPED\n");
+		}
 	}
 }
