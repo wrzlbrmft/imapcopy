@@ -92,6 +92,7 @@ if (0 == $srcFoldersCount) {
 printf("\n");
 
 printf('*** counting total source messages...');
+$srcFolderMessagesCounts = array();
 $srcMessagesCount = 0;
 $srcFolderNum = 0;
 foreach ($srcFolders as $srcFolder) {
@@ -110,17 +111,11 @@ foreach ($srcFolders as $srcFolder) {
 	printf('        counting source folder messages...');
 	$srcFolderMessagesCount = $src->getFolderMessagesCount();
 	printf(" %d source folder message(s) found\n", $srcFolderMessagesCount);
-	if (0 == $srcFolderMessagesCount) {
-		continue;
-	}
 
+	$srcFolderMessagesCounts[$srcFolderNum] = $srcFolderMessagesCount;
 	$srcMessagesCount += $srcFolderMessagesCount;
 }
 printf(">>> %d total source message(s) found\n", $srcMessagesCount);
-if (0 == $srcMessagesCount) {
-	printf(">>> nothing to do");
-	die();
-}
 
 printf("\n");
 
@@ -140,14 +135,10 @@ foreach ($srcFolders as $srcFolder) {
 		continue;
 	}
 
-	printf('        counting source folder messages...');
-	$srcFolderMessagesCount = $src->getFolderMessagesCount();
-	printf(" %d source folder message(s) found\n", $srcFolderMessagesCount);
-	if (0 == $srcFolderMessagesCount) {
-		continue;
-	}
+	$srcFolderMessagesCount = $srcFolderMessagesCounts[$srcFolderNum];
+	printf("        source folder message(s) to be copied: %d\n", $srcFolderMessagesCount);
 
-	printf('        destination folder will be');
+	printf('        destination folder will be:');
 	$folderPath = $src->splitFolderPath($srcFolder);
 	$dstFolder = $dst->joinFolderPath($folderPath, true);
 	$dstFolder = $dst->getMappedFolder($dstFolder);
