@@ -13,8 +13,7 @@
 			"INBOX.Drafts",
 			"INBOX.Spam",
 			"INBOX.Trash"
-		],
-		"ignoreEmptyFolders": false
+		]
 	},
 	"dst": {
 		"hostname": "imap.gmail.com",
