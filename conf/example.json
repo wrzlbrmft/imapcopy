@@ -13,7 +13,9 @@
 			"INBOX.Drafts",
 			"INBOX.Spam",
 			"INBOX.Trash"
-		]
+		],
+		"startFolderNum": 1,
+		"startFolderMessageNum": 1
 	},
 	"dst": {
 		"hostname": "imap.gmail.com",

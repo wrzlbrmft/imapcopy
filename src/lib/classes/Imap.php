@@ -251,4 +251,25 @@ class Imap {
 			$this->getMessageOptions($headerInfo),
 			$this->getMessageInternalDate($headerInfo));
 	}
+
+	public function isBeforeStartFolderNum($folderNum) {
+		$conf = $this->getConf();
+		$startFolderNum = isset($conf['startFolderNum']) ? $conf['startFolderNum'] : 1;
+
+		return $folderNum < $startFolderNum;
+	}
+
+	public function isBeforeStartFolderMessageNum($folderNum, $folderMessageNum) {
+		$conf = $this->getConf();
+		$startFolderNum = isset($conf['startFolderNum']) ? $conf['startFolderNum'] : 1;
+		$startFolderMessageNum = isset($conf['startFolderMessageNum']) ? $conf['startFolderMessageNum'] : 1;
+
+		if ($folderNum < $startFolderNum) {
+			return true;
+		}
+		elseif ($folderNum == $startFolderNum) {
+			return $folderMessageNum < $startFolderMessageNum;
+		}
+		return false;
+	}
 }

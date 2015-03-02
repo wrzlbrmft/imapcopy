@@ -124,6 +124,13 @@ $srcMessageNum = 0;
 $srcFolderNum = 0;
 foreach ($srcFolders as $srcFolder) {
 	$srcFolderNum++;
+	$srcFolderMessagesCount = $srcFolderMessagesCounts[$srcFolderNum];
+
+	if ($src->isBeforeStartFolderNum($srcFolderNum)) {
+		$srcMessageNum += $srcFolderMessagesCount;
+
+		continue;
+	}
 
 	printf("\n");
 	printf("    ... (f:%d/%d) '%s'\n", $srcFolderNum, $srcFoldersCount, utf8_encode($srcFolder));
@@ -135,7 +142,6 @@ foreach ($srcFolders as $srcFolder) {
 		continue;
 	}
 
-	$srcFolderMessagesCount = $srcFolderMessagesCounts[$srcFolderNum];
 	printf("        source folder message(s) to be copied: %d\n", $srcFolderMessagesCount);
 
 	printf('        destination folder will be:');
@@ -169,6 +175,10 @@ foreach ($srcFolders as $srcFolder) {
 
 	for ($srcFolderMessageNum = 1; $srcFolderMessageNum <= $srcFolderMessagesCount; $srcFolderMessageNum++) {
 		$srcMessageNum++;
+
+		if ($src->isBeforeStartFolderMessageNum($srcFolderNum, $srcFolderMessageNum)) {
+			continue;
+		}
 
 		printf("\n");
 		printf('        ... (f:%d/%d;m:%d/%d,%d/%d)',
