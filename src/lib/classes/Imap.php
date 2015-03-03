@@ -274,12 +274,24 @@ class Imap {
 	}
 
 	public function isOnlyFolderNum($folderNum) {
-		// TODO
-		return true;
+		$conf = $this->getConf();
+		$onlyFoldersNum = isset($conf['onlyFoldersNum']) ? $conf['onlyFoldersNum'] : array();
+
+		if (empty($onlyFoldersNum)) {
+			return true;
+		}
+		return in_array($folderNum, $onlyFoldersNum);
 	}
 
 	public function isOnlyFolderMessageNum($folderNum, $folderMessageNum) {
-		// TODO
-		return true;
+		$conf = $this->getConf();
+		$onlyFolderMessagesNum = isset($conf['onlyFolderMessagesNum']) ? $conf['onlyFolderMessagesNum'] : array();
+		$onlyFolderMessagesNum = isset($onlyFolderMessagesNum[$folderNum]) ?
+			$onlyFolderMessagesNum[$folderNum] : array();
+
+		if (empty($onlyFolderMessagesNum)) {
+			return true;
+		}
+		return in_array($folderMessageNum, $onlyFolderMessagesNum);
 	}
 }
