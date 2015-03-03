@@ -10,7 +10,8 @@ Thunderbird, first downloading everything and then uploading it again.
 *imapcopy* has successfully been tested with a
 [Courier IMAP](http://www.courier-mta.org/imap/)-to-[Gmail](https://mail.google.com/)
 migration of multiple IMAP accounts, some of which had up to 30.000 e-mail
-messages (17 GB with lots of huge attachments) stored across over 450 folders.
+messages (one was 17 GB of e-mails with lots of huge attachments stored across
+over 450 folders).
 
 ## Features
 
