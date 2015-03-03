@@ -143,9 +143,9 @@ foreach ($srcFolders as $srcFolder) {
 		continue;
 	}
 
-	printf("        source folder message(s) to be copied: %d\n", $srcFolderMessagesCount);
+	printf("        source folder message(s): %d\n", $srcFolderMessagesCount);
 
-	printf('        destination folder will be:');
+	printf('        destination folder:');
 	$folderPath = $src->splitFolderPath($srcFolder);
 	$dstFolder = $dst->joinFolderPath($folderPath, true);
 	$dstFolder = $dst->getMappedFolder($dstFolder);

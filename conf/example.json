@@ -14,8 +14,11 @@
 			"INBOX.Spam",
 			"INBOX.Trash"
 		],
-		"onlyFoldersNum": [],
-		"onlyFolderMessagesNum": {},
+		"onlyFoldersNum": [1, 2, 3],
+		"onlyFolderMessagesNum": {
+			"2": [7],
+			"3": [8, 9]
+		},
 		"startFolderNum": 1,
 		"startFolderMessageNum": 1
 	},
