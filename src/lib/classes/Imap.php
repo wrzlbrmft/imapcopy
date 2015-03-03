@@ -163,10 +163,10 @@ class Imap {
 		return $folder;
 	}
 
-	public function getIgnoredFolders() {
+	public function getExcludedFolders() {
 		$conf = $this->getConf();
-		return (isset($conf['ignoredFolders']) && is_array($conf['ignoredFolders'])) ?
-			$conf['ignoredFolders'] : array();
+		return (isset($conf['excludedFolders']) && is_array($conf['excludedFolders'])) ?
+			$conf['excludedFolders'] : array();
 	}
 
 	public function getMappedFolders() {
@@ -183,7 +183,7 @@ class Imap {
 				$subFolder = $this->decodeFolder($subFolder);
 			}
 			sort($subFolders);
-			return array_values(array_diff($subFolders, $this->getIgnoredFolders()));
+			return array_values(array_diff($subFolders, $this->getExcludedFolders()));
 		}
 		return false;
 	}

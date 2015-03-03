@@ -9,7 +9,7 @@
 		"readOnly": true,
 		"folderSeparator": ".",
 
-		"ignoredFolders": [
+		"excludedFolders": [
 			"INBOX.Drafts",
 			"INBOX.Spam",
 			"INBOX.Trash"
