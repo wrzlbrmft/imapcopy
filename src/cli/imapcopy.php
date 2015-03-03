@@ -126,7 +126,8 @@ foreach ($srcFolders as $srcFolder) {
 	$srcFolderNum++;
 	$srcFolderMessagesCount = $srcFolderMessagesCounts[$srcFolderNum];
 
-	if ($src->isBeforeStartFolderNum($srcFolderNum)) {
+	if (!$src->isOnlyFolderNum($srcFolderNum) ||
+		$src->isBeforeStartFolderNum($srcFolderNum)) {
 		$srcMessageNum += $srcFolderMessagesCount;
 
 		continue;
@@ -176,7 +177,8 @@ foreach ($srcFolders as $srcFolder) {
 	for ($srcFolderMessageNum = 1; $srcFolderMessageNum <= $srcFolderMessagesCount; $srcFolderMessageNum++) {
 		$srcMessageNum++;
 
-		if ($src->isBeforeStartFolderMessageNum($srcFolderNum, $srcFolderMessageNum)) {
+		if (!$src->isOnlyFolderMessageNum($srcFolderNum, $srcFolderMessageNum) ||
+			$src->isBeforeStartFolderMessageNum($srcFolderNum, $srcFolderMessageNum)) {
 			continue;
 		}
 

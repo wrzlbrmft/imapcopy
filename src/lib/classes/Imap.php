@@ -272,4 +272,14 @@ class Imap {
 		}
 		return false;
 	}
+
+	public function isOnlyFolderNum($folderNum) {
+		// TODO
+		return true;
+	}
+
+	public function isOnlyFolderMessageNum($folderNum, $folderMessageNum) {
+		// TODO
+		return true;
+	}
 }
