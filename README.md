@@ -3,7 +3,11 @@
 *imapcopy* is a command-line tool written in PHP to recursively copy all e-mail
 messages and folders from one IMAP account to another.
 
-It has successfully been tested with a
+The purpose of *imapcopy* is, to be run on either the source or the destination
+server to do a fast server-to-server migration instead of using a client like
+Thunderbird, first downloading everything and then uploading it again.
+
+*imapcopy* has successfully been tested with a
 [Courier IMAP](http://www.courier-mta.org/imap/)-to-[Gmail](https://mail.google.com/)
 migration of multiple IMAP accounts, some of which had up to 30.000 e-mail
 messages (17 GB with lots of huge attachments) stored across over 450 folders.
