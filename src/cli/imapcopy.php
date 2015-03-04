@@ -1,6 +1,6 @@
 <?php
-require_once('../lib/classes/Imap.php');
-require_once('../lib/utils.php');
+require_once(dirname(__FILE__) . '/../lib/classes/Imap.php');
+require_once(dirname(__FILE__) . '/../lib/utils.php');
 
 if (2 > $argc) {
 	printf("usage: php %s <confFile> [<option>]\n", basename($argv[0]));

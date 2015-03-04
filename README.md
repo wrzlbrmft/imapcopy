@@ -63,8 +63,6 @@ This would load the configuration from the file `config.json`:
 php imapcopy.php config.json
 ```
 
-**NOTE:** Make sure you are in the `src/cli` directory.
-
 There is one optional parameter `-test`, which will perform a test run with no
 changes made to the destination:
 
