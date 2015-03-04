@@ -13,7 +13,7 @@ then uploading it again through a relatively slow home DSL connection.
 
 *imapcopy* has successfully been tested with a
 [Courier IMAP](http://www.courier-mta.org/imap/)-to-[Gmail](https://mail.google.com/)
-migration of multiple IMAP accounts, some of which had up to 30.000 e-mail
+migration of multiple IMAP accounts, some of which had up to 30,000 e-mail
 messages (one was 17 GB of e-mails with lots of huge attachments stored across
 over 450 folders).
 
