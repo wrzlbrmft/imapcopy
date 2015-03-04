@@ -15,18 +15,25 @@ else {
 		$conf = json_decode(file_get_contents($confFile), true);
 
 		if (!is_array($conf) || !isset($conf['src']) || !isset($conf['dst'])) {
-			printf("error: invalid/incomplete configuration\n");
+			printf("ERROR: invalid/incomplete configuration in '%s'\n", $confFile);
 			die();
 		}
 	}
 	else {
-		printf("error: configuration file not found (%s)\n", $confFile);
+		printf("ERROR: configuration file not found: %s\n", $confFile);
 		die();
 	}
 
 	$args = $argv;
 	array_shift($args);
 	array_shift($args);
+
+	$validArgs = array('-test');
+	$invalidArgs = array_diff($args, $validArgs);
+	if (!empty($invalidArgs)) {
+		printf("ERROR: invalid option(s): %s\n", implode(', ', $invalidArgs));
+		die();
+	}
 }
 
 if (in_array('-test', $args)) {
