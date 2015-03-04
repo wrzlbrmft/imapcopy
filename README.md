@@ -98,7 +98,8 @@ message numbers are used to indicate the copying progress.
 But you can also use the numbers to start/continue copying at a specific folder
 or message or only copy specific folders or even specific messages in folders.
 If you make changes to the source IMAP account, the folder and message numbers
-might change and you will have a hard time to do things like that.
+might change and you will have a hard time to do things like that if you are in
+the middle of a migration.
 
 For more information see also *Migration Best Practice*.
 
