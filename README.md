@@ -47,7 +47,8 @@ debugging
 ## Requirements
 
 * [PHP](http://php.net/) 5.3.2+ command-line interpreter
-* PHP extensions imap and mbstring
+* PHP extensions: [IMAP](http://php.net/manual/en/book.imap.php) and
+[Multibyte String](http://php.net/manual/en/book.mbstring.php) (mbstring)
 * *On the user:*
   * Knowledge about the
 [JSON notation](http://en.wikipedia.org/wiki/JSON) (see *Configuration*)
@@ -122,7 +123,7 @@ The configuration is provided as a file written using the
 		"readOnly": true,
 		"folderSeparator": ".",
 
-		"ignoredFolders": [
+		"excludedFolders": [
 			"INBOX.Drafts",
 			"INBOX.Spam",
 			"INBOX.Trash"
@@ -155,27 +156,170 @@ The configuration is provided as a file written using the
 }
 ```
 
-The JSON needs to have a `src` and a `dst` object, otherwise *imapcopy* will
-exit with an error.
+You can also find the above example in `cli/example.json`.
+
+**NOTE:** The JSON must have a `src` and a `dst` object, otherwise *imapcopy*
+will exit with an error.
 
 ### Source and Destination Settings
 
-Both the source (`src`) and the destination (`dst`) have these settings.
+Both the source (`src`) and the destination (`dst`) have these settings in
+common:
 
-**hostname**
+#### hostname, port, username, password
 
-...
+Set the hostname (or IP address) and the port to connect to the mail server and
+add credentials to login to the IMAP account.
 
-**port**
+**NOTE:** If no port is specified the default IMAP port 143 is used.
 
-...
+#### ssl, sslNovalidateCert
 
+To connect via SSL set `ssl` to `true`. If your mail server certificate is
+invalid (e.g. self-signed), you can set `sslNovalidateCert` to `true` so the
+certificate is not validated on connect.
+
+#### readOnly
+
+It is a good idea to keep this setting set to `true` for the source account at
+any time. Of course, keep it on `true` for the destination. ;-)
+
+**NOTE:** When doing a test run using the `-test` command-line option, then
+the `readOnly` setting of the destination is overwritten with `true`.
+
+#### folderSeparator
+
+Set the folder separator used by the mail server. Typically it is a dot `.`
+(e.g. [Courier IMAP](http://www.courier-mta.org/imap/)) or a slash `/` (e.g.
+[Gmail](https://mail.google.com/)).
 
 ### Source-specific Settings
+
+#### excludedFolders
+
+List folders that you want to exclude from being copied.
+
+This will exclude `Drafts`, `Spam` and `Trash` under the inbox (`INBOX`):
+
+```
+		...
+		"excludedFolders": [
+			"INBOX.Drafts",
+			"INBOX.Spam",
+			"INBOX.Trash"
+		],
+		...
+```
+
+If you do not want to exclude and folders, set `excludedFolders` to empty:
+
+```
+		...
+		"excludedFolders": [],
+		...
+```
+
+**NOTE:** Folders excluded by `excludedFolders` will not get a folder number
+for the current run of *imapcopy* (see also *Folder and Message Numbers*).
+
+#### onlyFoldersNum
+
+If you only want to copy specific folders, then list the numbers of the folders
+you want to copy here.
+
+This will only copy the folders number 1, 2 and 3:
+
+```
+		...
+		"onlyFoldersNum": [1, 2, 3],
+		...
+
+```
+
+If you want to copy all folders, set `onlyFoldersNum` to empty:
+
+```
+		...
+		"onlyFoldersNum": [],
+		...
+
+```
+
+**NOTE:** If you use `onlyFoldersNum` in combination with `excludedFolders`,
+keep in mind, that folders excluded by `excludedFolders` will not get a folder
+number for the current run of *imapcopy* (see also *Folder and Message
+Numbers*).
+
+#### onlyFolderMessagesNum
+
+If you only want to copy specific messages of a folder, then list the number
+of the folder and of its messages you want to copy here:
+
+This will only copy message number 7 of folder number 2 and messages number 8
+and 9 of folder number 3:
+
+```
+		...
+		"onlyFolderMessagesNum": {
+			"2": [7],
+			"3": [8, 9]
+		},
+		...
+```
+
+If you do not only want to copy specific messages of folders, then set
+`onlyFolderMessagesNum` to empty:
+
+```
+		...
+		"onlyFolderMessagesNum": {},
+		...
+```
+
+#### Combining onlyFoldersNum and onlyFolderMessagesNum
+
+If you want to copy specific folders and from *some* of these folders only
+specific messages, then you can combine `onlyFoldersNum` and
+`onlyFolderMessagesNum`.
+
+This will only copy messages from folders numers 1, 2 and 3. Folder number 1
+will be copied with all its messages, but *imapcopy* will only copy message
+number 7 of folder number 2 and messages number 8 and 9 of folder number 3:
+
+```
+		...
+		"onlyFoldersNum": [1, 2, 3],
+		"onlyFolderMessagesNum": {
+			"2": [7],
+			"3": [8, 9]
+		},
+		...
+```
+
+**NOTE:** If you combine `onlyFoldersNum` and `onlyFolderMessagesNum`, make sure
+that all folders used in `onlyFolderMessagesNum` are also listed in
+`onlyFoldersNum`. The following setting will *not* copy any message from folders
+number 2 and 3:
+
+```
+		...
+		"onlyFoldersNum": [1],
+		"onlyFolderMessagesNum": {
+			"2": [7],
+			"3": [8, 9]
+		},
+		...
+```
+
+#### startFolderNum, startFolderMessageNum
 
 ...
 
 ### Destination-specific Settings
+
+...
+
+## Folder and Message Numbers
 
 ...
 
