@@ -13,9 +13,8 @@ then uploading it again through a relatively slow home DSL connection.
 
 *imapcopy* has successfully been tested with a
 [Courier IMAP](http://www.courier-mta.org/imap/)-to-[Gmail](https://mail.google.com/)
-migration of multiple IMAP accounts, some of which had up to 30,000 e-mail
-messages (one was 17 GB of e-mails with lots of huge attachments stored across
-over 450 folders).
+migration of multiple IMAP accounts, one of which was 17 GB in size containing
+over 30,000 e-mail with lots of huge attachments stored across over 450 folders.
 
 ## Features
 
@@ -28,8 +27,8 @@ over 450 folders).
   * Deleted
   * Draft
 * Optionally auto-remove invalid spaces from folder names
-* Support different folder separators for both source and destination, e.g. `.`
-and `/`
+* Support different folder separators for source and destination, e.g. `.` and
+`/`
 * Exclude specific folders from being copied
 * Re-locate the folder structure as a whole
   * Get it out of a sub-folder from the source
@@ -37,7 +36,7 @@ and `/`
 * Map individual source folders to different destination folders
 * Merge multiple source folders into one destination folder
 * Start/continue copying at a specific folder or message
-* Only copy specific folders or even specific messages in folders
+* Copy only specific folders or even specific messages in folders
 * SSL support
 * Optionally ignore invalid SSL certificates
 * Perform a test run with no changes made to the destination
@@ -53,7 +52,7 @@ debugging
   * Knowledge about the
 [JSON notation](http://en.wikipedia.org/wiki/JSON) (see *Configuration*)
   * Shell access (although it is possible, better not run *imapcopy* from your
-browser...)
+browser... ;-) )
 
 ## Download
 
@@ -64,7 +63,7 @@ file](https://github.com/wrzlbrmft/imapcopy/archive/master.zip) from GitHub.
 
 *imapcopy* is run from the command-line using the PHP command-line interpreter.
 The configuration is passed as a mandatory file name parameter, pointing to the
-configuration file (see below).
+configuration file (see *Configuration*).
 
 This would load the configuration from the file `config.json`:
 
@@ -83,21 +82,16 @@ A test run still produces all the console output of a regular run.
 
 ### Important Tip
 
-You should make sure that no changes are made to both the source and destination
-IMAP account, while *imapcopy* is running on them. This also includes new
-incoming messages being delivered to the source IMAP account.
-
-Although it will not break or delete anything (the source account is accessed
-read-only by default), you are well-advised to avoid *any* change made to the
-source IMAP account, until you have completely copied it to the destination.
-Especially if you need to run *imapcopy* several times to get the job fully
-done, e.g. due to errors.
+Avoid *any* change made to the source IMAP account, until you have completely
+copied it to the destination, especially if you need to run *imapcopy* several
+times to get the job fully done, e.g. due to errors. This also includes new
+incoming messages being delivered to the source IMAP account. 
 
 The reason is, that *imapcopy* counts all folders and their messages in the
 source IMAP account, before it actually starts copying them. The folder and
 message numbers are used to indicate the copying progress.
 But you can also use the numbers to start/continue copying at a specific folder
-or message or only copy specific folders or even specific messages in folders.
+or message or copy only specific folders or even specific messages in folders.
 If you make changes to the source IMAP account, the folder and message numbers
 might change and you will have a hard time to do things like that if you are in
 the middle of a migration.
@@ -182,7 +176,7 @@ certificate is not validated on connect.
 #### readOnly
 
 It is a good idea to keep this setting set to `true` for the source account at
-any time. Of course, keep it on `true` for the destination. ;-)
+any time. Of course, keep it set to `false` for the destination. ;-)
 
 **NOTE:** When doing a test run using the `-test` command-line option, then
 the `readOnly` setting of the destination is overwritten with `true`.
@@ -197,7 +191,7 @@ Set the folder separator used by the mail server. Typically it is a dot `.`
 
 #### excludedFolders
 
-List folders that you want to exclude from being copied.
+List folders that you want to exclude from being copied using their full name.
 
 This will exclude `Drafts`, `Spam` and `Trash` under the inbox (`INBOX`):
 
@@ -211,7 +205,7 @@ This will exclude `Drafts`, `Spam` and `Trash` under the inbox (`INBOX`):
 		...
 ```
 
-If you do not want to exclude and folders, set `excludedFolders` to empty:
+If you do not want to exclude any folders, set `excludedFolders` to empty:
 
 ```
 		...
@@ -219,15 +213,15 @@ If you do not want to exclude and folders, set `excludedFolders` to empty:
 		...
 ```
 
-**NOTE:** Folders excluded by `excludedFolders` will not get a folder number
-for the current run of *imapcopy* (see also *Folder and Message Numbers*).
+**NOTE:** Excluded folders will not get a folder number for the current run of
+*imapcopy* (see also *Folder and Message Numbers*).
 
 #### onlyFoldersNum
 
-If you only want to copy specific folders, then list the numbers of the folders
+If you want to copy only specific folders, then list the numbers of the folders
 you want to copy here.
 
-This will only copy the folders number 1, 2 and 3:
+This will copy only the folders number 1, 2 and 3:
 
 ```
 		...
@@ -246,16 +240,15 @@ If you want to copy all folders, set `onlyFoldersNum` to empty:
 ```
 
 **NOTE:** If you use `onlyFoldersNum` in combination with `excludedFolders`,
-keep in mind, that folders excluded by `excludedFolders` will not get a folder
-number for the current run of *imapcopy* (see also *Folder and Message
-Numbers*).
+keep in mind, that excluded folders will not get a folder number for the current
+run of *imapcopy* (see also *Folder and Message Numbers*).
 
 #### onlyFolderMessagesNum
 
-If you only want to copy specific messages of a folder, then list the number
-of the folder and of its messages you want to copy here:
+If you want to copy only specific messages of a folder, then list the number
+of the folder and of its messages you want to copy here.
 
-This will only copy message number 7 of folder number 2 and messages number 8
+This will copy only message number 7 of folder number 2 and messages number 8
 and 9 of folder number 3:
 
 ```
@@ -267,7 +260,7 @@ and 9 of folder number 3:
 		...
 ```
 
-If you do not only want to copy specific messages of folders, then set
+If you do not want to copy only specific messages of folders, then set
 `onlyFolderMessagesNum` to empty:
 
 ```
@@ -278,12 +271,12 @@ If you do not only want to copy specific messages of folders, then set
 
 #### Combining onlyFoldersNum and onlyFolderMessagesNum
 
-If you want to copy specific folders and from *some* of these folders only
+If you want to copy only specific folders and from *some* of these folders only
 specific messages, then you can combine `onlyFoldersNum` and
 `onlyFolderMessagesNum`.
 
-This will only copy messages from folders numers 1, 2 and 3. Folder number 1
-will be copied with all its messages, but *imapcopy* will only copy message
+This will copy only messages from folders number 1, 2 and 3. Folder number 1
+will be copied with all its messages, but *imapcopy* will copy only message
 number 7 of folder number 2 and messages number 8 and 9 of folder number 3:
 
 ```
@@ -313,11 +306,130 @@ number 2 and 3:
 
 #### startFolderNum, startFolderMessageNum
 
-...
+If you want to start/continue copying at a specific folder or message, then set
+these settings to the appropriate folder or message number.
+
+This will start/continue copying at folder number 3:
+
+```
+		...
+		"startFolderNum": 3,
+		"startFolderMessageNum": 1
+		...
+```
+
+This will start/continue copying at folder number 3, and *in* folder number 3 at
+message number 9:
+
+		...
+		"startFolderNum": 3,
+		"startFolderMessageNum": 9
+		...
+
+**NOTE:** Using `startFolderNum` or `startFolderMessageNum` will not change the
+counting of folders and their messages for the current run of *imapcopy* (see
+also *Folder and Message Numbers*).
 
 ### Destination-specific Settings
 
-...
+#### trimFolderPath
+
+Setting `trimFolderPath` to `true` will remove unnecessary whitespace from
+folder names before they are created in the destination:
+
+  * Remove whitespace at both the beginning and end
+  * Successive spaces are reduced to just a single space
+
+**NOTE:** If you are migrating to [Gmail](https://mail.google.com/), you need to
+set `trimFolderPath` to `true`.
+
+#### mappedFolders
+
+Using `mappedFolders` allows you to map individual source folders to different
+destination folders or merge multiple source folders into one destination
+folder.
+
+This will copy messages from the source folder `Sent` in the inbox (`INBOX`) to
+the folder `Old Sent Mails` in the destination:
+
+```
+		...
+		"mappedFolders": {
+			"INBOX/Sent": "Old Sent Mails"
+		},
+		...
+```
+
+This will merge the source folders `Trash` and `Deleted Messages` in the inbox
+(`INBOX`) into the folder `Old Deleted Mails` in the destination.
+
+```
+		...
+		"mappedFolders": {
+			"INBOX/Trash": "Old Deleted Mail",
+			"INBOX/Deleted Messages": "Old Deleted Mails"
+		},
+		...
+```
+
+**NOTE:** You must use the folder separator of the destination also for the
+source folder names!
+
+If you do not want to map any folders then set `mappedFolders` to empty:
+
+```
+		...
+		"mappedFolders": {},
+		...
+```
+
+#### popFolder, pushFolder
+
+Using `popFolder` and `pushFolder` allows you to re-locate the source folder
+structure as a whole. `popFolder` can remove parts from the beginning of the
+folder name to get it out of a sub-folder from the source. After that,
+`pushFolder` can add parts to the beginning of the folder name to put it into an
+arbitrary sub-folder in the destination.
+
+This will re-locate all source folders inside the inbox (`INBOX`) to the root
+level in the destination:
+
+```
+		...
+		"popFolder": "INBOX",
+		"pushFolder": ""
+		...
+```
+
+So for example `INBOX/Newsletters` becomes `Newsletters`.
+
+This will re-locate all source folders to the sub-folder `Old Folders` in the
+destination:
+
+```
+		...
+		"popFolder": "",
+		"pushFolder": "Old Folders"
+		...
+```
+
+So for example `Sent` becomes `Old Folders/Sent`.
+
+You can also combine `popFolder` and `pushFolder`. This will re-locate all
+source folders inside the inbox (`INBOX`) to the sub-folder `Old Folders` in the
+destination:
+
+```
+		...
+		"popFolder": "INBOX",
+		"pushFolder": "Old Folders"
+		...
+```
+
+So for example `INBOX/Newsletters` becomes `Old Folders/Newsletters`.
+
+**NOTE:** `popFolder` and `pushFolder` are processed *after* folder mappings
+using `mappedFolders`.
 
 ## Folder and Message Numbers
 
