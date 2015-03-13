@@ -2,6 +2,11 @@
 require_once(dirname(__FILE__) . '/../lib/classes/Imap.php');
 require_once(dirname(__FILE__) . '/../lib/utils.php');
 
+if (version_compare(phpversion(), '5.3.2', '<')) {
+	printf("ERROR: requires at least PHP version 5.3.2 (this is version %s)\n", phpversion());
+	die();
+}
+
 if (2 > $argc) {
 	printf("usage: php %s <confFile> [<option>]\n", basename($argv[0]));
 	printf(" -test   perform a test run with no changes made (this will force a read-only\n");
