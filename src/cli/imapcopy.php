@@ -11,6 +11,8 @@ if (2 > $argc) {
 	printf("usage: php %s <confFile> [<option>]\n", basename($argv[0]));
 	printf(" -test   perform a test run with no changes made (this will force a read-only\n");
 	printf("         connection to the source and will not open the destination at all)\n");
+	printf(" -info   check connection to source and show information about folders, i.e.\n");
+	printf("         show name and number of folder and count messages\n");
 	die();
 }
 else {
@@ -33,7 +35,7 @@ else {
 	array_shift($args);
 	array_shift($args);
 
-	$validArgs = array('-test');
+	$validArgs = array('-test', '-info');
 	$invalidArgs = array_diff($args, $validArgs);
 	if (!empty($invalidArgs)) {
 		printf("ERROR: invalid option(s): %s\n", implode(', ', $invalidArgs));
@@ -71,7 +73,7 @@ printf("\n");
 printf("*** opening destination\n");
 $dst = new Imap($conf['dst']);
 printf('    connecting via \'%s\'...', $dst->getMailbox());
-if (!$testRun) {
+if (!$testRun && !in_array('-info', $args)) {
 	$_ = $dst->connect();
 	printf(" %s\n", test($_));
 	if (!$dst->isConnected()) {
@@ -128,6 +130,10 @@ foreach ($srcFolders as $srcFolder) {
 	$srcMessagesCount += $srcFolderMessagesCount;
 }
 printf(">>> %d total source message(s) found\n", $srcMessagesCount);
+
+if (in_array('-info', $args)) {
+	die();
+}
 
 printf("\n");
 

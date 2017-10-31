@@ -71,7 +71,7 @@ This would load the configuration from the file `config.json`:
 php imapcopy.php config.json
 ```
 
-There is one optional parameter `-test`, which will perform a test run with no
+With the optional parameter `-test`, a test run will be performed with no
 changes made to the destination:
 
 ```
@@ -80,12 +80,20 @@ php imapcopy.php config.json -test
 
 A test run still produces all the console output of a regular run.
 
+The second optional parameter `-info` leads to an output with information about the folders, i.e. the names and numbers of folders found at the source, and counts the messages inside the folders:
+
+```
+php imapcopy.php config.json -info
+```
+
+No changes will be made to the destination either.
+
 ### Important Tip
 
 Avoid *any* change made to the source IMAP account, until you have completely
 copied it to the destination, especially if you need to run *imapcopy* several
 times to get the job fully done, e.g. due to errors. This also includes new
-incoming messages being delivered to the source IMAP account. 
+incoming messages being delivered to the source IMAP account.
 
 The reason is, that *imapcopy* counts all folders and their messages in the
 source IMAP account, before it actually starts copying them. The folder and
@@ -443,4 +451,3 @@ using `mappedFolders`.
 
 This software is distributed under the terms of the
 [GNU General Public License v3](https://www.gnu.org/licenses/gpl-3.0.en.html).
-
