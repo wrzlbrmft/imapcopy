@@ -1,6 +1,6 @@
 <?php
-require_once(dirname(__FILE__) . '/../lib/classes/Imap.php');
-require_once(dirname(__FILE__) . '/../lib/utils.php');
+require_once(dirname(__FILE__).'/../lib/classes/Imap.php');
+require_once(dirname(__FILE__).'/../lib/utils.php');
 
 if (version_compare(phpversion(), '5.3.2', '<')) {
 	printf("ERROR: requires at least PHP version 5.3.2 (this is version %s)\n", phpversion());
@@ -14,8 +14,7 @@ if (2 > $argc) {
 	printf(" -info   check connection to source and show information about folders, i.e.\n");
 	printf("         show name and number of folder and count messages\n");
 	die();
-}
-else {
+} else {
 	$confFile = $argv[1];
 
 	if (file_exists($confFile)) {
@@ -25,8 +24,7 @@ else {
 			printf("ERROR: invalid/incomplete configuration in '%s'\n", $confFile);
 			die();
 		}
-	}
-	else {
+	} else {
 		printf("ERROR: configuration file not found: %s\n", $confFile);
 		die();
 	}
@@ -35,7 +33,7 @@ else {
 	array_shift($args);
 	array_shift($args);
 
-	$validArgs = array('-test', '-info');
+	$validArgs   = ['-test', '-info'];
 	$invalidArgs = array_diff($args, $validArgs);
 	if (!empty($invalidArgs)) {
 		printf("ERROR: invalid option(s): %s\n", implode(', ', $invalidArgs));
@@ -50,8 +48,7 @@ if (in_array('-test', $args)) {
 	printf("\n");
 
 	$conf['src']['readOnly'] = true;
-}
-else {
+} else {
 	$testRun = false;
 }
 
@@ -63,8 +60,7 @@ printf(" %s\n", test($_));
 if (!$src->isConnected()) {
 	printf(">>> error opening source\n");
 	die();
-}
-else {
+} else {
 	printf(">>> source is ready\n");
 }
 
@@ -82,8 +78,7 @@ if (!$testRun && !in_array('-info', $args)) {
 	} else {
 		printf(">>> destination is ready\n");
 	}
-}
-else {
+} else {
 	printf(" SKIPPED\n");
 }
 
@@ -106,14 +101,14 @@ if (0 == $srcFoldersCount) {
 printf("\n");
 
 printf('*** counting total source messages...');
-$srcFolderMessagesCounts = array();
-$srcMessagesCount = 0;
-$srcFolderNum = 0;
+$srcFolderMessagesCounts = [];
+$srcMessagesCount        = 0;
+$srcFolderNum            = 0;
 foreach ($srcFolders as $srcFolder) {
 	$srcFolderNum++;
 
 	printf("\n");
-	printf("    ... (f:%d/%d) '%s'\n", $srcFolderNum, $srcFoldersCount, utf8_encode($srcFolder));
+	printf("    ... (f:%d/%d) '%s'\n", $srcFolderNum, $srcFoldersCount, $srcFolder);
 
 	printf('        opening source folder...');
 	$_ = $src->openFolder($srcFolder);
@@ -127,7 +122,7 @@ foreach ($srcFolders as $srcFolder) {
 	printf(" %d source folder message(s) found\n", $srcFolderMessagesCount);
 
 	$srcFolderMessagesCounts[$srcFolderNum] = $srcFolderMessagesCount;
-	$srcMessagesCount += $srcFolderMessagesCount;
+	$srcMessagesCount                       += $srcFolderMessagesCount;
 }
 printf(">>> %d total source message(s) found\n", $srcMessagesCount);
 
@@ -139,20 +134,20 @@ printf("\n");
 
 printf("*** recursively copying folders and messages...");
 $srcMessageNum = 0;
-$srcFolderNum = 0;
+$srcFolderNum  = 0;
 foreach ($srcFolders as $srcFolder) {
 	$srcFolderNum++;
 	$srcFolderMessagesCount = $srcFolderMessagesCounts[$srcFolderNum];
 
 	if (!$src->isOnlyFolderNum($srcFolderNum) ||
-		$src->isBeforeStartFolderNum($srcFolderNum)) {
+	    $src->isBeforeStartFolderNum($srcFolderNum)) {
 		$srcMessageNum += $srcFolderMessagesCount;
 
 		continue;
 	}
 
 	printf("\n");
-	printf("    ... (f:%d/%d) '%s'\n", $srcFolderNum, $srcFoldersCount, utf8_encode($srcFolder));
+	printf("    ... (f:%d/%d) '%s'\n", $srcFolderNum, $srcFoldersCount, $srcFolder);
 
 	printf('        opening source folder...');
 	$_ = $src->openFolder($srcFolder);
@@ -165,18 +160,17 @@ foreach ($srcFolders as $srcFolder) {
 
 	printf('        destination folder:');
 	$folderPath = $src->splitFolderPath($srcFolder);
-	$dstFolder = $dst->joinFolderPath($folderPath, true);
-	$dstFolder = $dst->getMappedFolder($dstFolder);
-	$dstFolder = $dst->popFolder($dstFolder);
-	$dstFolder = $dst->pushFolder($dstFolder);
-	printf(" '%s'\n", utf8_encode($dstFolder));
+	$dstFolder  = $dst->joinFolderPath($folderPath, true);
+	$dstFolder  = $dst->getMappedFolder($dstFolder);
+	$dstFolder  = $dst->popFolder($dstFolder);
+	$dstFolder  = $dst->pushFolder($dstFolder);
+	printf(" '%s'\n", $dstFolder);
 
 	printf('        creating destination folder...');
 	if (!$testRun) {
 		$_ = $dst->createFolder($dstFolder);
 		printf(" %s\n", test($_));
-	}
-	else {
+	} else {
 		printf(" SKIPPED\n");
 	}
 
@@ -187,8 +181,7 @@ foreach ($srcFolders as $srcFolder) {
 		if (!$_) {
 			continue;
 		}
-	}
-	else {
+	} else {
 		printf(" SKIPPED\n");
 	}
 
@@ -196,7 +189,7 @@ foreach ($srcFolders as $srcFolder) {
 		$srcMessageNum++;
 
 		if (!$src->isOnlyFolderMessageNum($srcFolderNum, $srcFolderMessageNum) ||
-			$src->isBeforeStartFolderMessageNum($srcFolderNum, $srcFolderMessageNum)) {
+		    $src->isBeforeStartFolderMessageNum($srcFolderNum, $srcFolderMessageNum)) {
 			continue;
 		}
 
@@ -211,17 +204,16 @@ foreach ($srcFolders as $srcFolder) {
 		);
 
 		$srcMessageHeaderInfo = $src->getMessageHeaderInfo($srcFolderMessageNum);
-		$srcMessageSubject = isset($srcMessageHeaderInfo->subject) ? $srcMessageHeaderInfo->subject : '';
+		$srcMessageSubject    = isset($srcMessageHeaderInfo->subject) ? $srcMessageHeaderInfo->subject : '';
 		printf(" '%s'\n", mb_decode_mimeheader($srcMessageSubject));
 		printf("            source message date is %s\n", $src->getMessageInternalDate($srcMessageHeaderInfo));
 
-		$srcMessageSize = isset($srcMessageHeaderInfo->Size) ? $srcMessageHeaderInfo->Size: '?';
+		$srcMessageSize = isset($srcMessageHeaderInfo->Size) ? $srcMessageHeaderInfo->Size : '?';
 		printf('            loading source message (%s byte(s))...', $srcMessageSize);
 		if (!$testRun) {
 			$srcMessage = $src->loadMessage($srcFolderMessageNum);
 			printf(" %d byte(s) read\n", strlen($srcMessage));
-		}
-		else {
+		} else {
 			printf(" SKIPPED\n");
 		}
 
@@ -229,8 +221,7 @@ foreach ($srcFolders as $srcFolder) {
 		if (!$testRun) {
 			$_ = $dst->storeMessage($dstFolder, $srcMessage, $srcMessageHeaderInfo);
 			printf(" %s\n", test($_));
-		}
-		else {
+		} else {
 			printf(" SKIPPED\n");
 		}
 	}
