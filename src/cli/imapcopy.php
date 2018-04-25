@@ -79,7 +79,8 @@ if (!$testRun && !in_array('-info', $args)) {
 	if (!$dst->isConnected()) {
 		printf(">>> error opening destination\n");
 		die();
-	} else {
+	}
+	else {
 		printf(">>> destination is ready\n");
 	}
 }
