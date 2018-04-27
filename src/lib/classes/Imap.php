@@ -58,7 +58,7 @@ class Imap {
 			$username = isset($conf['username']) ? $conf['username'] : '';
 			$password = isset($conf['password']) ? $conf['password'] : '';
 
-			$connection = imap_open(imap_utf7_encode($this->getMailbox()), $username, $password);
+			$connection = imap_open(mb_convert_encoding($this->getMailbox(), 'UTF7-IMAP', 'UTF-8'), $username, $password);
 			if (false !== $connection) {
 				$this->setConnection($connection);
 				return true;
@@ -104,7 +104,7 @@ class Imap {
 	public function encodeFolder($folder) {
 		$folderPath = $this->splitFolderPath($folder);
 		foreach ($folderPath as &$i) {
-			$i = imap_utf7_encode($i);
+			$i = mb_convert_encoding($i, 'UTF7-IMAP', 'UTF-8');
 		}
 		return $this->joinFolderPath($folderPath);
 	}
@@ -112,7 +112,7 @@ class Imap {
 	public function decodeFolder($folder) {
 		$folderPath = $this->splitFolderPath($folder);
 		foreach ($folderPath as &$i) {
-			$i = imap_utf7_decode($i);
+			$i = mb_convert_encoding($i, 'UTF-8', 'UTF7-IMAP');
 		}
 		return $this->joinFolderPath($folderPath);
 	}

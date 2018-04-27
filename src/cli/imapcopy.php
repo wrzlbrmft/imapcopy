@@ -114,7 +114,7 @@ foreach ($srcFolders as $srcFolder) {
 	$srcFolderNum++;
 
 	printf("\n");
-	printf("    ... (f:%d/%d) '%s'\n", $srcFolderNum, $srcFoldersCount, utf8_encode($srcFolder));
+	printf("    ... (f:%d/%d) '%s'\n", $srcFolderNum, $srcFoldersCount, $srcFolder);
 
 	printf('        opening source folder...');
 	$_ = $src->openFolder($srcFolder);
@@ -153,7 +153,7 @@ foreach ($srcFolders as $srcFolder) {
 	}
 
 	printf("\n");
-	printf("    ... (f:%d/%d) '%s'\n", $srcFolderNum, $srcFoldersCount, utf8_encode($srcFolder));
+	printf("    ... (f:%d/%d) '%s'\n", $srcFolderNum, $srcFoldersCount, $srcFolder);
 
 	printf('        opening source folder...');
 	$_ = $src->openFolder($srcFolder);
@@ -170,7 +170,7 @@ foreach ($srcFolders as $srcFolder) {
 	$dstFolder = $dst->getMappedFolder($dstFolder);
 	$dstFolder = $dst->popFolder($dstFolder);
 	$dstFolder = $dst->pushFolder($dstFolder);
-	printf(" '%s'\n", utf8_encode($dstFolder));
+	printf(" '%s'\n", $dstFolder);
 
 	printf('        creating destination folder...');
 	if (!$testRun) {
