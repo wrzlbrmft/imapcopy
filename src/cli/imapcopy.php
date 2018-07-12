@@ -108,6 +108,7 @@ printf("\n");
 
 printf('*** counting total source messages...');
 $srcFolderMessagesCounts = array();
+$srcFolderMessagesFlags = array();
 $srcMessagesCount = 0;
 $srcFolderNum = 0;
 foreach ($srcFolders as $srcFolder) {
@@ -129,6 +130,10 @@ foreach ($srcFolders as $srcFolder) {
 
 	$srcFolderMessagesCounts[$srcFolderNum] = $srcFolderMessagesCount;
 	$srcMessagesCount += $srcFolderMessagesCount;
+
+	if ($src->isMessageFlagsEnabled()) {
+		$srcFolderMessagesFlags[$srcFolderNum] = $src->getFolderMessagesFlags($srcFolderMessagesCount);
+	}
 }
 printf(">>> %d total source message(s) found\n", $srcMessagesCount);
 
@@ -228,7 +233,13 @@ foreach ($srcFolders as $srcFolder) {
 
 		printf('            storing destination message...');
 		if (!$testRun) {
-			$_ = $dst->storeMessage($dstFolder, $srcMessage, $srcMessageHeaderInfo);
+			if ($src->isMessageFlagsEnabled() && $dst->isMessageFlagsEnabled()) {
+				$messageFlags = $srcFolderMessagesFlags[$srcFolderNum][$srcFolderMessageNum];
+			}
+			else {
+				$messageFlags = NULL;
+			}
+			$_ = $dst->storeMessage($dstFolder, $srcMessage, $srcMessageHeaderInfo, $messageFlags);
 			printf(" %s\n", test($_));
 		}
 		else {
