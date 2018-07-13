@@ -26,7 +26,7 @@ over 30,000 e-mail with lots of huge attachments stored across over 450 folders.
   * Flagged
   * Deleted
   * Draft
-* Optionally preserve user-defined flags (also known as "IMAP keywords" or "tags")
+* Optionally preserve [user-defined flags](https://tools.ietf.org/html/rfc5788#section-1) (also known as "IMAP keywords" or "tags")
 * Optionally auto-remove invalid spaces from folder names
 * Support different folder separators for source and destination, e.g. `.` and
 `/`

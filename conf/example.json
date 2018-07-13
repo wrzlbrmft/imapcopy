@@ -8,6 +8,7 @@
 		"sslNovalidateCert": false,
 		"readOnly": true,
 		"folderSeparator": ".",
+		"flags": true,
 
 		"excludedFolders": [
 			"INBOX.Drafts",
@@ -31,6 +32,7 @@
 		"sslNovalidateCert": false,
 		"readOnly": false,
 		"folderSeparator": "/",
+		"flags": true,
 
 		"trimFolderPath": true,
 		"mappedFolders": {

@@ -307,8 +307,9 @@ class Imap {
 		if (isset($conf['flags']) && !empty($conf['flags'])) {
 			return true;
 		}
-		else
+		else {
 			return false;
+		}
 	}
 
 	public function getFolderMessagesFlags($length) {
@@ -320,14 +321,14 @@ class Imap {
 			foreach ($headers as $header) {
 				$flags = NULL;
 
-				if (preg_match("/{.*?}/", $header, $matches, PREG_OFFSET_CAPTURE, $FLAGS_OFFSET) == true) {
+				if (preg_match('/{.*?}/', $header, $matches, PREG_OFFSET_CAPTURE, $FLAGS_OFFSET) == true) {
 					foreach ($matches as $match) {
 						if ($match[1] != $FLAGS_OFFSET) {
 							continue;
 						}
 
-						$flags = ltrim($match[0], "{");
-						$flags = rtrim($flags, "}");
+						$flags = ltrim($match[0], '{');
+						$flags = rtrim($flags, '}');
 						break;
 					}
 				}
@@ -337,7 +338,7 @@ class Imap {
 		}
 
 		// Need array to start at 1 to match message indices
-		array_unshift($messagesFlags, "dummy");
+		array_unshift($messagesFlags, NULL);
 		unset($messagesFlags[0]);
 
 		return $messagesFlags;
