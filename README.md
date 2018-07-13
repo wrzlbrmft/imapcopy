@@ -125,6 +125,7 @@ The configuration is provided as a file written using the
 		"sslNovalidateCert": false,
 		"readOnly": true,
 		"folderSeparator": ".",
+		"flags": true,
 
 		"excludedFolders": [
 			"INBOX.Drafts",
@@ -148,6 +149,7 @@ The configuration is provided as a file written using the
 		"sslNovalidateCert": false,
 		"readOnly": false,
 		"folderSeparator": "/",
+		"flags": true,
 
 		"trimFolderPath": true,
 		"mappedFolders": {
