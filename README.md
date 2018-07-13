@@ -26,6 +26,7 @@ over 30,000 e-mail with lots of huge attachments stored across over 450 folders.
   * Flagged
   * Deleted
   * Draft
+* Optionally preserve [user-defined flags](https://tools.ietf.org/html/rfc5788#section-1) (also known as "IMAP keywords" or "tags")
 * Optionally auto-remove invalid spaces from folder names
 * Support different folder separators for source and destination, e.g. `.` and
 `/`
@@ -124,6 +125,7 @@ The configuration is provided as a file written using the
 		"sslNovalidateCert": false,
 		"readOnly": true,
 		"folderSeparator": ".",
+		"flags": true,
 
 		"excludedFolders": [
 			"INBOX.Drafts",
@@ -147,6 +149,7 @@ The configuration is provided as a file written using the
 		"sslNovalidateCert": false,
 		"readOnly": false,
 		"folderSeparator": "/",
+		"flags": true,
 
 		"trimFolderPath": true,
 		"mappedFolders": {
@@ -194,6 +197,11 @@ the `readOnly` setting of the destination is overwritten with `true`.
 Set the folder separator used by the mail server. Typically it is a dot `.`
 (e.g. [Courier IMAP](http://www.courier-mta.org/imap/)) or a slash `/` (e.g.
 [Gmail](https://mail.google.com/)).
+
+#### flags
+
+To preserve user-defined flags (also known as "IMAP keywords" or "tags") in
+messages, set `flags` to `true` for the source and destination.
 
 ### Source-specific Settings
 

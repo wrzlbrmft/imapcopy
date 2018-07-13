@@ -246,9 +246,15 @@ class Imap {
 		return date('d-M-Y H:i:s O', $messageHeaderInfo->udate);
 	}
 
-	public function storeMessage($folder, $message, $headerInfo) {
+	public function storeMessage($folder, $message, $headerInfo, $messageFlags = NULL) {
+		$messageOptions = $this->getMessageOptions($headerInfo);
+
+		if ($this->isMessageFlagsEnabled() && $messageFlags != NULL) {
+			$messageOptions .= ' ' . $messageFlags;
+		}
+
 		return imap_append($this->getConnection(), $this->getFullFolderName($folder), $message,
-			$this->getMessageOptions($headerInfo),
+			$messageOptions,
 			$this->getMessageInternalDate($headerInfo));
 	}
 
@@ -294,4 +300,48 @@ class Imap {
 		}
 		return in_array($folderMessageNum, $onlyFolderMessagesNum);
 	}
+
+	public function isMessageFlagsEnabled() {
+		$conf = $this->getConf();
+
+		if (isset($conf['flags']) && !empty($conf['flags'])) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public function getFolderMessagesFlags($length) {
+		$messagesFlags = array();
+		$FLAGS_OFFSET = 44;
+
+		$headers = imap_headers($this->getConnection());
+		if ($headers == true) {
+			foreach ($headers as $header) {
+				$flags = NULL;
+
+				if (preg_match('/{.*?}/', $header, $matches, PREG_OFFSET_CAPTURE, $FLAGS_OFFSET) == true) {
+					foreach ($matches as $match) {
+						if ($match[1] != $FLAGS_OFFSET) {
+							continue;
+						}
+
+						$flags = ltrim($match[0], '{');
+						$flags = rtrim($flags, '}');
+						break;
+					}
+				}
+
+				$messagesFlags[] = $flags;
+			}
+		}
+
+		// Need array to start at 1 to match message indices
+		array_unshift($messagesFlags, NULL);
+		unset($messagesFlags[0]);
+
+		return $messagesFlags;
+	}
+
 }
