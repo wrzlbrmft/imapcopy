@@ -1,4 +1,4 @@
 <?php
 function test($_) {
-	return $_ ? 'OK' : 'ERROR';
+    return $_ ? 'OK' : 'ERROR';
 }

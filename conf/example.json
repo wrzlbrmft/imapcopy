@@ -1,44 +1,44 @@
 {
-	"src": {
-		"hostname": "127.0.0.1",
-		"port": 143,
-		"username": "john.doe",
-		"password": "*****",
-		"ssl": false,
-		"sslNovalidateCert": false,
-		"readOnly": true,
-		"folderSeparator": ".",
-		"flags": true,
+    "src": {
+        "hostname": "127.0.0.1",
+        "port": 143,
+        "username": "john.doe",
+        "password": "*****",
+        "ssl": false,
+        "sslNovalidateCert": false,
+        "readOnly": true,
+        "folderSeparator": ".",
+        "flags": true,
 
-		"excludedFolders": [
-			"INBOX.Drafts",
-			"INBOX.Spam",
-			"INBOX.Trash"
-		],
-		"onlyFoldersNum": [1, 2, 3],
-		"onlyFolderMessagesNum": {
-			"2": [7],
-			"3": [8, 9]
-		},
-		"startFolderNum": 1,
-		"startFolderMessageNum": 1
-	},
-	"dst": {
-		"hostname": "imap.gmail.com",
-		"port": 993,
-		"username": "john.doe@gmail.com",
-		"password": "*****",
-		"ssl": true,
-		"sslNovalidateCert": false,
-		"readOnly": false,
-		"folderSeparator": "/",
-		"flags": true,
+        "excludedFolders": [
+            "INBOX.Drafts",
+            "INBOX.Spam",
+            "INBOX.Trash"
+        ],
+        "onlyFoldersNum": [1, 2, 3],
+        "onlyFolderMessagesNum": {
+            "2": [7],
+            "3": [8, 9]
+        },
+        "startFolderNum": 1,
+        "startFolderMessageNum": 1
+    },
+    "dst": {
+        "hostname": "imap.gmail.com",
+        "port": 993,
+        "username": "john.doe@gmail.com",
+        "password": "*****",
+        "ssl": true,
+        "sslNovalidateCert": false,
+        "readOnly": false,
+        "folderSeparator": "/",
+        "flags": true,
 
-		"trimFolderPath": true,
-		"mappedFolders": {
-			"INBOX/Sent": "[Gmail]/Gesendet"
-		},
-		"popFolder": "INBOX",
-		"pushFolder": ""
-	}
+        "trimFolderPath": true,
+        "mappedFolders": {
+            "INBOX/Sent": "[Gmail]/Gesendet"
+        },
+        "popFolder": "INBOX",
+        "pushFolder": ""
+    }
 }

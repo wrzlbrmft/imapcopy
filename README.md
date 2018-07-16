@@ -116,48 +116,48 @@ The configuration is provided as a file written using the
 
 ```json
 {
-	"src": {
-		"hostname": "127.0.0.1",
-		"port": 143,
-		"username": "john.doe",
-		"password": "*****",
-		"ssl": false,
-		"sslNovalidateCert": false,
-		"readOnly": true,
-		"folderSeparator": ".",
-		"flags": true,
+    "src": {
+        "hostname": "127.0.0.1",
+        "port": 143,
+        "username": "john.doe",
+        "password": "*****",
+        "ssl": false,
+        "sslNovalidateCert": false,
+        "readOnly": true,
+        "folderSeparator": ".",
+        "flags": true,
 
-		"excludedFolders": [
-			"INBOX.Drafts",
-			"INBOX.Spam",
-			"INBOX.Trash"
-		],
-		"onlyFoldersNum": [1, 2, 3],
-		"onlyFolderMessagesNum": {
-			"2": [7],
-			"3": [8, 9]
-		},
-		"startFolderNum": 1,
-		"startFolderMessageNum": 1
-	},
-	"dst": {
-		"hostname": "imap.gmail.com",
-		"port": 993,
-		"username": "john.doe@gmail.com",
-		"password": "*****",
-		"ssl": true,
-		"sslNovalidateCert": false,
-		"readOnly": false,
-		"folderSeparator": "/",
-		"flags": true,
+        "excludedFolders": [
+            "INBOX.Drafts",
+            "INBOX.Spam",
+            "INBOX.Trash"
+        ],
+        "onlyFoldersNum": [1, 2, 3],
+        "onlyFolderMessagesNum": {
+            "2": [7],
+            "3": [8, 9]
+        },
+        "startFolderNum": 1,
+        "startFolderMessageNum": 1
+    },
+    "dst": {
+        "hostname": "imap.gmail.com",
+        "port": 993,
+        "username": "john.doe@gmail.com",
+        "password": "*****",
+        "ssl": true,
+        "sslNovalidateCert": false,
+        "readOnly": false,
+        "folderSeparator": "/",
+        "flags": true,
 
-		"trimFolderPath": true,
-		"mappedFolders": {
-			"INBOX/Sent": "[Gmail]/Gesendet"
-		},
-		"popFolder": "INBOX",
-		"pushFolder": ""
-	}
+        "trimFolderPath": true,
+        "mappedFolders": {
+            "INBOX/Sent": "[Gmail]/Gesendet"
+        },
+        "popFolder": "INBOX",
+        "pushFolder": ""
+    }
 }
 ```
 
@@ -212,21 +212,21 @@ List folders that you want to exclude from being copied using their full name.
 This will exclude `Drafts`, `Spam` and `Trash` under the inbox (`INBOX`):
 
 ```
-		...
-		"excludedFolders": [
-			"INBOX.Drafts",
-			"INBOX.Spam",
-			"INBOX.Trash"
-		],
-		...
+        ...
+        "excludedFolders": [
+            "INBOX.Drafts",
+            "INBOX.Spam",
+            "INBOX.Trash"
+        ],
+        ...
 ```
 
 If you do not want to exclude any folders, set `excludedFolders` to empty:
 
 ```
-		...
-		"excludedFolders": [],
-		...
+        ...
+        "excludedFolders": [],
+        ...
 ```
 
 **NOTE:** Excluded folders will not get a folder number for the current run of
@@ -240,18 +240,18 @@ you want to copy here.
 This will copy only the folders number 1, 2 and 3:
 
 ```
-		...
-		"onlyFoldersNum": [1, 2, 3],
-		...
+        ...
+        "onlyFoldersNum": [1, 2, 3],
+        ...
 
 ```
 
 If you want to copy all folders, set `onlyFoldersNum` to empty:
 
 ```
-		...
-		"onlyFoldersNum": [],
-		...
+        ...
+        "onlyFoldersNum": [],
+        ...
 
 ```
 
@@ -268,21 +268,21 @@ This will copy only message number 7 of folder number 2 and messages number 8
 and 9 of folder number 3:
 
 ```
-		...
-		"onlyFolderMessagesNum": {
-			"2": [7],
-			"3": [8, 9]
-		},
-		...
+        ...
+        "onlyFolderMessagesNum": {
+            "2": [7],
+            "3": [8, 9]
+        },
+        ...
 ```
 
 If you do not want to copy only specific messages of folders, then set
 `onlyFolderMessagesNum` to empty:
 
 ```
-		...
-		"onlyFolderMessagesNum": {},
-		...
+        ...
+        "onlyFolderMessagesNum": {},
+        ...
 ```
 
 #### Combining onlyFoldersNum and onlyFolderMessagesNum
@@ -296,13 +296,13 @@ will be copied with all its messages, but *imapcopy* will copy only message
 number 7 of folder number 2 and messages number 8 and 9 of folder number 3:
 
 ```
-		...
-		"onlyFoldersNum": [1, 2, 3],
-		"onlyFolderMessagesNum": {
-			"2": [7],
-			"3": [8, 9]
-		},
-		...
+        ...
+        "onlyFoldersNum": [1, 2, 3],
+        "onlyFolderMessagesNum": {
+            "2": [7],
+            "3": [8, 9]
+        },
+        ...
 ```
 
 **NOTE:** If you combine `onlyFoldersNum` and `onlyFolderMessagesNum`, make sure
@@ -311,13 +311,13 @@ that all folders used in `onlyFolderMessagesNum` are also listed in
 number 2 and 3:
 
 ```
-		...
-		"onlyFoldersNum": [1],
-		"onlyFolderMessagesNum": {
-			"2": [7],
-			"3": [8, 9]
-		},
-		...
+        ...
+        "onlyFoldersNum": [1],
+        "onlyFolderMessagesNum": {
+            "2": [7],
+            "3": [8, 9]
+        },
+        ...
 ```
 
 #### startFolderNum, startFolderMessageNum
@@ -328,19 +328,19 @@ these settings to the appropriate folder or message number.
 This will start/continue copying at folder number 3:
 
 ```
-		...
-		"startFolderNum": 3,
-		"startFolderMessageNum": 1
-		...
+        ...
+        "startFolderNum": 3,
+        "startFolderMessageNum": 1
+        ...
 ```
 
 This will start/continue copying at folder number 3, and *in* folder number 3 at
 message number 9:
 
-		...
-		"startFolderNum": 3,
-		"startFolderMessageNum": 9
-		...
+        ...
+        "startFolderNum": 3,
+        "startFolderMessageNum": 9
+        ...
 
 **NOTE:** Using `startFolderNum` or `startFolderMessageNum` will not change the
 counting of folders and their messages for the current run of *imapcopy* (see
@@ -369,23 +369,23 @@ This will copy messages from the source folder `Sent` in the inbox (`INBOX`) to
 the folder `Old Sent Mails` in the destination:
 
 ```
-		...
-		"mappedFolders": {
-			"INBOX/Sent": "Old Sent Mails"
-		},
-		...
+        ...
+        "mappedFolders": {
+            "INBOX/Sent": "Old Sent Mails"
+        },
+        ...
 ```
 
 This will merge the source folders `Trash` and `Deleted Messages` in the inbox
 (`INBOX`) into the folder `Old Deleted Mails` in the destination.
 
 ```
-		...
-		"mappedFolders": {
-			"INBOX/Trash": "Old Deleted Mail",
-			"INBOX/Deleted Messages": "Old Deleted Mails"
-		},
-		...
+        ...
+        "mappedFolders": {
+            "INBOX/Trash": "Old Deleted Mail",
+            "INBOX/Deleted Messages": "Old Deleted Mails"
+        },
+        ...
 ```
 
 **NOTE:** You must use the folder separator of the destination also for the
@@ -394,9 +394,9 @@ source folder names!
 If you do not want to map any folders then set `mappedFolders` to empty:
 
 ```
-		...
-		"mappedFolders": {},
-		...
+        ...
+        "mappedFolders": {},
+        ...
 ```
 
 #### popFolder, pushFolder
@@ -411,10 +411,10 @@ This will re-locate all source folders inside the inbox (`INBOX`) to the root
 level in the destination:
 
 ```
-		...
-		"popFolder": "INBOX",
-		"pushFolder": ""
-		...
+        ...
+        "popFolder": "INBOX",
+        "pushFolder": ""
+        ...
 ```
 
 So for example `INBOX/Newsletters` becomes `Newsletters`.
@@ -423,10 +423,10 @@ This will re-locate all source folders to the sub-folder `Old Folders` in the
 destination:
 
 ```
-		...
-		"popFolder": "",
-		"pushFolder": "Old Folders"
-		...
+        ...
+        "popFolder": "",
+        "pushFolder": "Old Folders"
+        ...
 ```
 
 So for example `Sent` becomes `Old Folders/Sent`.
@@ -436,10 +436,10 @@ source folders inside the inbox (`INBOX`) to the sub-folder `Old Folders` in the
 destination:
 
 ```
-		...
-		"popFolder": "INBOX",
-		"pushFolder": "Old Folders"
-		...
+        ...
+        "popFolder": "INBOX",
+        "pushFolder": "Old Folders"
+        ...
 ```
 
 So for example `INBOX/Newsletters` becomes `Old Folders/Newsletters`.
